@@ -66,7 +66,7 @@
     headerRow["Name"] = "Name"
     headerRow["Status"] = "Status"
     headerRow["Phone"] = "Phone"
-    headerRow["Pool Type"] = "Status"
+    headerRow["PoolType"] = "Pool Type"
 
     createRow("thead")
     fontWeight = "bold"
@@ -102,9 +102,16 @@
     var phoneCol = document.createElement("TD");
     phoneCol.style.fontWeight = fontWeight;
     phoneCol.class = "col px-md-5";
-    var phoneData = document.createTextNode(data.Timings);
+    var phoneData = document.createTextNode(data.Phone);
     phoneCol.appendChild(phoneData);
     document.getElementById(rowId).appendChild(phoneCol);
+    
+    var poolTypeCol = document.createElement("TD");
+    poolTypeCol.style.fontWeight = fontWeight;
+    poolTypeCol.class = "col px-md-5";
+    var poolTypeData = document.createTextNode(data.PoolType);
+    poolTypeCol.appendChild(poolTypeData);
+    document.getElementById(rowId).appendChild(poolTypeCol);
   }
 </script>
 

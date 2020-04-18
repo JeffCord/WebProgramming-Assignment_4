@@ -83,6 +83,7 @@ def add_pool():
     return render_template('pool_added.html')
 
 
+# retrieve all pools in the database
 @app.route("/pools", methods=['GET'])  # TODO ask about adding this GET method header check
 def get_pools():
     db, username, password, hostname = get_db_creds()
@@ -97,37 +98,23 @@ def get_pools():
 
     check_cur = cnx.cursor()
     check_cur.execute('SELECT * FROM pools_data.pools')
-    # my_result = check_cur.fetchall()
+    my_result = check_cur.fetchall()
     # print(my_result)
 
-    return render_template('pools.html')
+    output_data = []
+
+    for row in my_result:
+        row_as_dict = {'Name': row[0], 'Status': row[1], 'Phone': row[2], 'PoolType': row[3]}
+        output_data.append(row_as_dict)
+
+    # Make sure to return json.dumps with a list of a json object(s) as an argument
+    return json.dumps(output_data)
 
 
+# The pools homepage
 @app.route("/")
 def pool_info_website():
     return render_template('index.html')  # renders the html file to be displayed in the browser
-
-
-# # validations for the fields of each pool
-# def validate_status(s):
-#     valid_statuses = ['Closed', 'Open', 'In Renovation']
-#     return s in valid_statuses
-#
-#
-# def validate_pool_types(s):
-#     valid_pool_types = ['Neighborhood', 'University', 'Community']
-#     return s in valid_pool_types
-#
-#
-# def validate_phone(s):
-#     if len(s) != 10:
-#         return False
-#
-#     for i in s:
-#         if not i.isdigit():
-#             return False
-#
-#     return True
 
 
 if __name__ == "__main__":
