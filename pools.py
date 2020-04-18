@@ -45,16 +45,39 @@ def create_table():
         else:
             print(err.msg, '$$$')
 
-
+# Insert Pool into database.
 @app.route("/static/add_pool", methods=['POST'])
 def add_pool():
-
-    # Assignment 4: Insert Pool into database.
     # Extract all the form fields
     pool_name = request.form['pool_name']
     status = request.form['status']
-    print("Pool Name:" + pool_name)
-    print("Status:" + status)
+    phone = request.form['phone']
+    pool_type = request.form['pool_type']
+    # print(pool_name, "   ", status, "   ", phone, "   ", pool_type)
+
+    db, username, password, hostname = get_db_creds()  # retrieve env vars
+
+    # create a MySQLConnection object
+    cnx = ''
+    try:
+        cnx = mysql.connector.connect(user=username, password=password,
+                                      host=hostname,
+                                      database=db)
+    except Exception as exp:
+        print(exp)
+
+    # input values surrounded by quotes, separated by commas
+    input_csv = '\'' + pool_name + '\', \'' + status + '\', \'' + \
+              phone + '\', \'' + pool_type + '\''
+
+    # create a cursor object that interacts with the MySQL server using a MySQLConnection object
+    cur = cnx.cursor()
+
+    # insert the new record
+    cur.execute("INSERT INTO pools_data.pools (`pool_name`, `status`, `phone`, `pool_type`) values (" + input_csv + ")")
+
+    # make the changes to the database permanent
+    cnx.commit()
 
     # Insert into database.
     return render_template('pool_added.html')
@@ -74,8 +97,8 @@ def get_pools():
 
     check_cur = cnx.cursor()
     check_cur.execute('SELECT * FROM pools_data.pools')
-    my_result = check_cur.fetchall()
-    print(my_result)
+    # my_result = check_cur.fetchall()
+    # print(my_result)
 
     return render_template('pools.html')
 
