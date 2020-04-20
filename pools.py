@@ -104,7 +104,7 @@ def get_pools():
     output_data = []
 
     for row in my_result:
-        row_as_dict = {'Name': row[0], 'Status': row[1], 'Phone': row[2], 'PoolType': row[3]}
+        row_as_dict = {'pool_name': row[0], 'status': row[1], 'phone': row[2], 'pool_type': row[3]}
         output_data.append(row_as_dict)
 
     # Make sure to return json.dumps with a list of a json object(s) as an argument
